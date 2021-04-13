@@ -1,5 +1,3 @@
-const mongo = require('../utils/mongoose')
-
 module.exports = {
     name: 'ready',
     once: true,
@@ -10,7 +8,7 @@ module.exports = {
             activity: { name: `BWTinder Bot is helping people find love in ${client.guilds.cache.size} servers! | *help`},
             status: "dnd"
         })
+       client.mongoose.init()
 
-        client.mongoose.init()
     }
 }

@@ -4,14 +4,11 @@ const connectionURL = 'mongodb+srv://admin:JeffyWhy1753215@cluster0.u4mow.mongod
 module.exports = {
     init: () => {
         const dbOptions = {
-            useNewURLParser: true,
+            useNewUrlParser: true,
             useUnifiedTopology: true,
-            autoIndex: false,
-            reconnectTries: Number.MAX_VALUE,
-            reconnectInterval: 500,
+            useCreateIndex: true,
             poolSize: 5,
             connectTimeoutMS: 10000,
-            family: 4
         };
 
         mongoose.connect(connectionURL, dbOptions);
