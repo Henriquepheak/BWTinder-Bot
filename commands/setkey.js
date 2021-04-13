@@ -12,8 +12,9 @@ module.exports = {
                 console.log(apiKey) // For Now(Once mongo is fixed ill add database support) -- Bizarre
             }
         } else {
-            message.channel.send('This needs to be executed in dms with the bot.')
+            message.channel.send('This needs to be executed in DMs with the bot. If you do not have them on, turn them on.')
         }
     }
 }
 
+// SetKey Command (*setkey || BizarreAvatar)
