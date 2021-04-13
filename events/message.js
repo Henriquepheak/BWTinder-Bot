@@ -1,10 +1,10 @@
-require('dotenv').config();
+const Discord = require('discord.js')
 
 module.exports = {
     name: 'message',
     once: false,
     execute(message, client) {
-        const prefix = process.env.PREFIX;
+        const prefix = '*';
         if (!message.content.startsWith(prefix) || message.author.bot) {
             return
         } else {
