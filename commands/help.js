@@ -8,7 +8,7 @@ module.exports = {
             .setDescription("Need help? Look no further!")
             .setThumbnail(client.user.displayAvatarURL())
             .addFields(
-                { name: "Prefix", value: "The prefix for the bot is `\"*\"`"},
+                { name: "Prefix", value: "The prefix for the bot is `\*\`"},
                 { name: "matches", value: "Shows how many people you have available. If you have any, you will auto accept them. It swipes for you!"},
                 { name: "profile", value: "Displays your profile on bedwars tinder. It displays your age, discord id, uuid, ign, date of birth, etc."},
                 { name: "setkey", value: "Placeholder Value"}
