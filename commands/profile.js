@@ -5,6 +5,7 @@ module.exports = {
     name: "profile",
     description: "Checks your bwtinder profile",
     async execute(client, message, args, Discord) {
+        
         let apiKey;
         let user = await tokenData.findOne({ userID: message.author.id});
 
