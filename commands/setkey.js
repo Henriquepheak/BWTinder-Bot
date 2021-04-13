@@ -9,7 +9,7 @@ module.exports = {
             if (!apiKey) {
                 message.channel.send('Error: No API Key. To get this, go to: https://bit.ly/3t8vTc9.')
             } else {
-                console.log(apiKey)
+                console.log(apiKey) // For Now(Once mongo is fixed ill add database support) -- Bizarre
             }
         } else {
             message.channel.send('This needs to be executed in dms with the bot.')

@@ -35,11 +35,3 @@ module.exports = {
         }
     }
 }
-
-function capitalize (s) {
-    if (!typeof s == String) {
-        s = `${s}`
-    } else {
-        return `${s.slice(1).toUpperCase()}${s.slice(2, s.length)}`;
-    }
-}
