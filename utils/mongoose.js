@@ -4,14 +4,10 @@ const connectionURL = 'mongodb+srv://admin:JeffyWhy1753215@cluster0.bzgs3.mongod
 module.exports = {
     init: () => {
         const dbOptions = {
-            useNewURLParser: false,
             useUnifiedTopology: true,
             autoIndex: false,
-            reconnectTries: Number.MAX_VALUE,
-            reconnectInterval: 500,
             poolSize: 5,
             connectTimeoutMS: 10000,
-            family: 4
         };
 
         mongoose.connect(connectionURL, dbOptions);
@@ -22,7 +18,7 @@ module.exports = {
         });
 
         mongoose.connection.on('err', err => {
-            console.error(`Mongoose connection error: \n${err.stack}`);
+            console.error(`Mongoose connection error`);
         });
 
         mongoose.connection.on('disconnected', () => {
