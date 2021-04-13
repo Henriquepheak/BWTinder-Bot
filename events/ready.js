@@ -13,7 +13,7 @@ module.exports = {
 
         await mongo().then((mongoose) => {
             try {
-                console.log('MongoDB Connected Successfully!')
+                console.log('----------------------------------------')
             } finally {
                 mongoose.connection.close()
             }

@@ -1,13 +1,21 @@
 {
-  "name": "electron-v2",
+  "name": "bwtinder-bot",
   "version": "1.0.0",
   "description": "",
   "main": "index.js",
   "scripts": {
-    "start": "npx nodemon index.js"
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/andrewtam6/BWTinder-Bot.git"
   },
   "author": "",
   "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/andrewtam6/BWTinder-Bot/issues"
+  },
+  "homepage": "https://github.com/andrewtam6/BWTinder-Bot#readme",
   "dependencies": {
     "axios": "^0.21.1",
     "discord.js": "^12.5.3",
