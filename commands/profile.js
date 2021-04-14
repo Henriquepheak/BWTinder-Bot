@@ -5,7 +5,6 @@ module.exports = {
     name: "profile",
     description: "Checks your bwtinder profile",
     async execute(client, message, args, Discord) {
-        
         let apiKey;
         let user = await tokenData.findOne({ userID: message.author.id});
 
@@ -17,6 +16,8 @@ module.exports = {
         if (!apiKey) {
             message.channel.send(`Error: No API Key Specified. To get this, go to: https://bit.ly/3t8vTc9`)
         } else {
+            let msg = await message.channel.send('Fetching...');
+
             axios.post('https://bwtinder.com/api/user', {
                 token: apiKey
             }).then((res) => {
@@ -37,8 +38,14 @@ module.exports = {
                     )
                     .setColor('F32626')
                     .setFooter('As of now, you can check your profile only with api key. Contact BizarreAvatar#8346 if anything bugs out', message.author.displayAvatarURL())
-                    .setThumbnail(message.author.displayAvatarURL())
-                message.channel.send(embed)
+                    .setThumbnail(message.author.displayAvatarURL());
+
+                
+                msg.edit('Finished fetching, response below').then(() => {
+                    return msg.edit(embed);
+                }).catch(() => {
+                    return message.channel.send(embed);
+                });
             }).catch((err) => {
                 console.error(err)
             })
