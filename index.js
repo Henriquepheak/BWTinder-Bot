@@ -2,7 +2,7 @@
 // If you are not one of them, get the fuck off of here.
 
 const Discord = require('discord.js');
-const client = new Discord.Client();
+const client = new Discord.Client({ ws: { intents: new Discord.Intents(Discord.Intents.ALL) }});
 client.mongoose = require('./utils/mongoose.js')
 require('dotenv').config();
 
