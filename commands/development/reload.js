@@ -4,7 +4,7 @@ module.exports = {
     name: "reload",
     description: "Reloads a command",
     execute(client, message, args, Discord) {
-        if (message.member.roles.cache.find(role => role.name === "Developer")) {
+        if (message.member.roles.cache.find(role => role.id === "826514038288416828")) {
             if(!args.length) return message.channel.send("You didn't pass any commands to reload!");
             const commandName = args[0].toLowerCase();
             const command = message.client.commands.get(commandName)

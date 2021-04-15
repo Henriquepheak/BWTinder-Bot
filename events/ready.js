@@ -17,7 +17,7 @@ module.exports = {
 
         setInterval(() => {
             acceptMatches(client, Discord)
-        }, 1800000)
+        }, 1200000)
         
     }
 }

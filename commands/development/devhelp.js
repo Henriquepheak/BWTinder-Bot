@@ -2,7 +2,7 @@ module.exports = {
     name: "devhelp",
     description: "Send an embed containing every developer command",
     execute(client, message, args, Discord) {
-        if (message.member.roles.cache.find(role => role.name === "Developer")) {
+        if (message.member.roles.cache.find(role => role.id === "826514038288416828")) {
             const embed = new Discord.MessageEmbed()
             .setColor("F32626")
             .setTitle("Help")
