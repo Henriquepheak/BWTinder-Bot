@@ -1,5 +1,5 @@
 const mongoose = require('mongoose')
-const userSettings = require('../schemas/usersettingschema')
+const userSettings = require('../../schemas/usersettingschema')
 
 module.exports = {
     name: "settings",
