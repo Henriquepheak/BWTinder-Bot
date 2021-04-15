@@ -56,7 +56,7 @@ module.exports = {
                             }
                         })
                     }
-                    const noMatchesAtAllEmbed = new Discord.MessageEmbed()
+                    const embedMatches = new Discord.MessageEmbed()
                         .setColor('F32626')
                         .setTitle(`${acceptedMatches + deniedMatches} attempted accepts: (${message.author.tag})`)
                         .setDescription(`Out of these people ${acceptedMatches} swiped right on you. However, ${deniedMatches} swiped left on you`)
@@ -65,9 +65,9 @@ module.exports = {
                         .setTimestamp();
                     
                     msg.edit('Finished fetching, response below').then(() => {
-                        return msg.edit(noMatchesAtAllEmbed);
+                        return msg.edit(embedMatches);
                     }).catch(() => {
-                        return message.channel.send(noMatchesAtAllEmbed);
+                        return message.channel.send(embedMatches);
                     });
                 }
 
