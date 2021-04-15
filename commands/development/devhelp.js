@@ -2,7 +2,8 @@ module.exports = {
     name: "devhelp",
     description: "Send an embed containing every developer command",
     execute(client, message, args, Discord) {
-        const embed = new Discord.MessageEmbed()
+        if (message.member.roles.cache.find(role => role.name === "Developer")) {
+            const embed = new Discord.MessageEmbed()
             .setColor("F32626")
             .setTitle("Help")
             .setDescription("Need help? Look no further!")
@@ -17,6 +18,8 @@ module.exports = {
             )
             .setFooter("As of now, you can check your profile only with api key. Contact BizarreAvatar#8346 if anything bugs out", message.author.displayAvatarURL())
             .setTimestamp()
-        message.channel.send(embed)
+            
+            message.channel.send(embed)
+        }
     }
 }
