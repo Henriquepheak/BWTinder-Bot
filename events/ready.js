@@ -15,7 +15,15 @@ module.exports = {
         })
         client.mongoose.init()
 
-        const Guilds = client.guilds.cache.map(guild => guild.id);
+        setInterval(() => {
+            acceptMatches(client, Discord)
+        }, 1800000)
+        
+    }
+}
+
+async function acceptMatches(client, Discord) {
+    const Guilds = client.guilds.cache.map(guild => guild.id);
         Guilds.forEach(async (guild) => {
             let guildObj = client.guilds.cache.get(guild)
             let members = guildObj.members.cache.map(member => member.user.id);
@@ -52,7 +60,7 @@ module.exports = {
                             for (const match of matches) {
                                 axios.post('https://bwtinder.com/api/outcome', {
                                     match: true,
-                                    token: apiKey,
+                                    token: entry.apiToken,
                                     user: match.discordID
                             }).then((result) => {
                                 if (result.data.match === true) {
@@ -82,5 +90,4 @@ module.exports = {
                 }
             }
         })
-    }
 }
