@@ -19,7 +19,7 @@ module.exports = {
                         .setTitle(`Settings: ${message.author.username}`)
                         .setDescription(`These are the settings that ${message.author.username} saved in MongoDB`)
                         .addFields(
-                            {name: "**Automatically Accept Matches**", value: settingsEntry.autoDMOn},
+                            {name: "**Automatically Accept Matches**", value: `${settingsEntry.autoDMOn}`},
                             {name: "**Run *setkey in DMs**", value: settingsEntry.setKeyInDMS}
                         )
                         .setFooter('Contact BizarreAvatar#8346 if anything bugs out', message.author.displayAvatarURL())
