@@ -12,5 +12,5 @@ client.commands = new Discord.Collection();
     require(`./handlers/${handler}`)(client, Discord)
 })
 
-client.login(process.env.TOKEN);
+client.login(process.env.ALPHA_TOKEN);
 

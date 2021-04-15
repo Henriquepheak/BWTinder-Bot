@@ -34,15 +34,35 @@ module.exports = {
                     return
                 }
                 if (args[1].toLowerCase() === 'autoaccept') {
-                    userSettings.findOneAndUpdate({userID: message.author.id}, {
-                        autoDMOn: !autoDMOn,
-                    })
-                    message.channel.send(`Toggled 'autoaccept' parameter`);
+                    let entry = await userSettings.findOne({userID: message.author.id})
+                    if (entry.autoDMOn === 'true') {
+                        userSettings.findOneAndUpdate({userID: message.author.id}, {
+                            autoDMOn: 'false',
+                        })
+                        message.channel.send(`Toggled 'autoaccept' parameter to false`);
+                    } else if (entry.autoDMOn === 'false') {
+                        userSettings.findOneAndUpdate({userID: message.author.id}, {
+                            autoDMOn: 'true',
+                        })
+                        message.channel.send(`Toggled 'autoaccept' parameter to true`);
+                    } else {
+                        console.log('**ERROR WITH SETTINGS SCHEMA**')
+                    }
                 } else if (args[1].toLowerCase() === 'setkey') {
-                    userSettings.findOneAndUpdate({userID: message.author.id}, {
-                        setKeyInDMS: !setKeyInDMS,
-                    })
-                    message.channel.send(`Toggled 'setkey' parameter`);
+                    let entry = await userSettings.findOne({userID: message.author.id})
+                    if (entry.setKeyInDMS === true) {
+                        userSettings.findOneAndUpdate({userID: message.author.id}, {
+                            setKeyInDMS: false,
+                        })
+                        message.channel.send(`Toggled 'setkey' parameter to false`);
+                    } else if (entry.setKeyInDMS === false) {
+                        userSettings.findOneAndUpdate({userID: message.author.id}, {
+                            setKeyInDMS: true,
+                        })
+                        message.channel.send(`Toggled 'setkey' parameter to true`);
+                    } else {
+                        console.log('**URGENT ERROR WITH MONGODB**')
+                    }
                 }
             } else {
                 message.channel.send('Error: Invalid Syntax. Valid Syntax: *settings || *settings change <autoaccept/setkey>');
@@ -54,8 +74,8 @@ module.exports = {
 function saveDBData(userID) {
     const settingsDB = new userSettings({
         userID, 
-        autoDMOn: false,
-        setKeyInDMS: true,
+        autoDMOn: 'false',
+        setKeyInDMS: 'true',
     });
     settingsDB.save();
 }

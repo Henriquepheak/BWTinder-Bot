@@ -2,8 +2,8 @@ const mongoose = require('mongoose');
 
 const userSettingsSchema = mongoose.Schema({
     userID: String,
-    autoDMOn: Boolean,
-    setKeyInDMS: Boolean,
+    autoDMOn: String,
+    setKeyInDMS: String,
 }, {
     timestamps: true
 })

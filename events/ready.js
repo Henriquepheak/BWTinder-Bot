@@ -1,4 +1,4 @@
-const mongoose = require('mongoose');
+const userSettings = require('../schemas/usersettingschema')
 const tokenData = require('../schemas/tokenschema');
 const axios = require('axios');
 const Discord = require('discord.js')
@@ -15,10 +15,7 @@ module.exports = {
         })
         client.mongoose.init()
 
-        setInterval(() => {
-            acceptMatches(client, Discord)
-        }, 1800000)
-        
+        timedMatch(client, Discord)
     }
 }
 
@@ -90,4 +87,37 @@ async function acceptMatches(client, Discord) {
                 }
             }
         })
+}
+
+function saveDBData(userID) {
+    const settingsDB = new userSettings({
+        userID, 
+        autoDMOn: false,
+        setKeyInDMS: true,
+    });
+    settingsDB.save();
+}
+
+function timedMatch(client, Discord) {
+    setTimeout(async () => {
+        const guilds = client.guilds.cache.map(guild => guild.id);
+        guilds.forEach(async (guild) => {
+            let guildObj = client.guilds.cache.get(guild)
+            let users = guildObj.members.cache.map(member => member.user.id)
+            for (const user of users) {
+                let settingsEntry = true;
+                if (!settingsEntry) {
+                    saveDBData(user)
+                } else {
+                    if (settingsEntry === true) {
+                        acceptMatches(client, Discord)
+                        console.log('DMed matches')
+                    } else {
+                        
+                    }
+                }
+            }
+        }) 
+        timedMatch(client, Discord)           
+    }, 180000);
 }
