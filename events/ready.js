@@ -15,9 +15,10 @@ module.exports = {
         })
         client.mongoose.init()
 
+        acceptMatches(client, Discord)
         setInterval(() => {
             acceptMatches(client, Discord)
-        }, 1200000)
+        }, 60000*20);
         
     }
 }
@@ -90,4 +91,9 @@ async function acceptMatches(client, Discord) {
                 }
             }
         })
+}
+
+function timer(client, Discord) {
+    acceptMatches(client, Discord)
+    timer(client, Discord)
 }
