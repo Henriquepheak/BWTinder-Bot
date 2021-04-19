@@ -2,6 +2,7 @@ const mongoose = require('mongoose');
 const tokenData = require('../schemas/tokenschema');
 const axios = require('axios');
 const Discord = require('discord.js')
+const settingsData = require('../schemas/usersettingschema')
 
 module.exports = {
     name: 'ready',
@@ -14,6 +15,9 @@ module.exports = {
             status: "dnd"
         })
         client.mongoose.init()
+
+        
+        acceptMatches(client, Discord);
 
         setInterval(() => {
             acceptMatches(client, Discord)
