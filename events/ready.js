@@ -33,6 +33,10 @@ module.exports = {
                     setInterval(() => {
                         acceptMatches(client, Discord)
                     }, 60000*20)
+                } else if (entry.autoDMOn === false) {
+                    continue;
+                } else {
+                    continue;
                 }
             }
         })
