@@ -1,5 +1,5 @@
 const axios = require('axios');
-const tokenData = require('../schemas/tokenschema')
+const tokenData = require('../../schemas/tokenschema')
 const mongoose = require('mongoose')
 
 module.exports = {

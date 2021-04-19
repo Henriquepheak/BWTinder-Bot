@@ -2,6 +2,7 @@ const userSettings = require('../schemas/usersettingschema')
 const tokenData = require('../schemas/tokenschema');
 const axios = require('axios');
 const Discord = require('discord.js')
+const settingsData = require('../schemas/usersettingschema')
 
 module.exports = {
     name: 'ready',
@@ -15,7 +16,13 @@ module.exports = {
         })
         client.mongoose.init()
 
-        timedMatch(client, Discord)
+
+        acceptMatches(client, Discord);
+
+        setInterval(() => {
+            acceptMatches(client, Discord)
+        }, 60000*20);
+
     }
 }
 
@@ -37,7 +44,7 @@ async function acceptMatches(client, Discord) {
                         token: entry.apiToken,
                     }).then((res) => {
                         if (!res.data.success) return userOBJ.send('`The api request failed, this may be because of an incorrect api token.`')
-                        
+
                         let matches = res.data.matches;
                         if (matches.length === 0) {
                             const noMatchesEmbed = new Discord.MessageEmbed()
@@ -47,7 +54,7 @@ async function acceptMatches(client, Discord) {
                             .setFooter('As of now, you can check your matches only with api key. Contact BizarreAvatar#8346 if anything bugs out', userOBJ.user.displayAvatarURL())
                             .setThumbnail(userOBJ.user.displayAvatarURL())
                             .setTimestamp()
-                            
+
                             fetchMessage.edit('Finished fetching, response below').then(() => {
                                 return fetchMessage.edit(noMatchesEmbed);
                             }).catch(() => {
@@ -87,37 +94,4 @@ async function acceptMatches(client, Discord) {
                 }
             }
         })
-}
-
-function saveDBData(userID) {
-    const settingsDB = new userSettings({
-        userID, 
-        autoDMOn: false,
-        setKeyInDMS: true,
-    });
-    settingsDB.save();
-}
-
-function timedMatch(client, Discord) {
-    setTimeout(async () => {
-        const guilds = client.guilds.cache.map(guild => guild.id);
-        guilds.forEach(async (guild) => {
-            let guildObj = client.guilds.cache.get(guild)
-            let users = guildObj.members.cache.map(member => member.user.id)
-            for (const user of users) {
-                let settingsEntry = true;
-                if (!settingsEntry) {
-                    saveDBData(user)
-                } else {
-                    if (settingsEntry === true) {
-                        acceptMatches(client, Discord)
-                        console.log('DMed matches')
-                    } else {
-                        
-                    }
-                }
-            }
-        }) 
-        timedMatch(client, Discord)           
-    }, 180000);
 }
