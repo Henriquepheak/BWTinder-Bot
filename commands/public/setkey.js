@@ -14,22 +14,22 @@ module.exports = {
                 const filter = {
                     userID: message.author.id,
                 }
-                const results = await tokenData.find(filter);
-                if (results && results.length) {
-                    tokenData.updateMany(filter, {
-                        apiToken: apiKey,
-                    })
+                const results = await tokenData.findOne(filter);
+                if (results) {
+                    await results.updateOne({
+                        apiToken: apiKey
+                    });
                 } else {
                     saveDBData(message.author.id, apiKey)
                 }
 
                 const embed = new Discord.MessageEmbed()
-                .setColor('F32626')
-                .setTitle('Success!')
-                .setDescription('Sucessfully saved your api key to the database. You will get dms every 30 minutes with your matches')
-                .setThumbnail(message.author.displayAvatarURL())
-                .setFooter("As of now, you can save your api key only with mongodb. Contact BizarreAvatar#8346 if anything bugs out", message.author.displayAvatarURL())
-                .setTimestamp()
+                    .setColor('F32626')
+                    .setTitle('Success!')
+                    .setDescription('Sucessfully saved your api key to the database. You will get dms every 30 minutes with your matches')
+                    .setThumbnail(message.author.displayAvatarURL())
+                    .setFooter("As of now, you can save your api key only with mongodb. Contact BizarreAvatar#8346 if anything bugs out", message.author.displayAvatarURL())
+                    .setTimestamp()
                 message.channel.send(embed).then(() => {
                     console.log(`Saved token data of ${message.author.tag} to MongoDB`)
                 }).catch((err) => {
