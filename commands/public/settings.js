@@ -5,7 +5,7 @@ module.exports = {
     name: "settings",
     description: "Settings for BWTinder Bot",
     async execute(client, message, args, Discord) {
-        let settingsEntry = await userSettings.findOne({ userID: message.author.id })
+        let settingsEntry = await userSettings.findOne({ userID: message.author.id });
         if (!settingsEntry) {
             saveDBData(message.author.id)
             message.channel.send('Created default settings. Type *settings again to view them')
@@ -33,29 +33,30 @@ module.exports = {
                     return
                 }
                 if (args[1].toLowerCase() === 'autoaccept') {
-                    if (settingsEntry.autoDMOn === true) {
-                        settingsEntry.update({
-                            autoDMOn: false,
-                        })
+                    if (settingsEntry.autoDMOn) {
+                        await settingsEntry.updateOne({
+                            autoDMOn: false
+                        });
                         message.channel.send(`Toggled 'autoaccept' parameter to false`);
-                    } else if (settingsEntry.autoDMOn === false) {
-                        settingsEntry.update({
-                            autoDMOn: true,
-                        })
+                    } else if (!settingsEntry.autoDMOn) {
+                        await settingsEntry.updateOne({
+                            autoDMOn: true
+                        });
                         message.channel.send(`Toggled 'autoaccept' parameter to true`);
                     } else {
                         console.log('Error with autoaccept parameter')
                     }
+
                 } else if (args[1].toLowerCase() === 'setkey') {
-                    if (settingsEntry.setKeyInDMS === true) {
-                        settingsEntry.update({
-                            setKeyInDMS: false,
-                        })
+                    if (settingsEntry.setKeyInDMS) {
+                        await settingsEntry.updateOne({
+                            setKeyInDMS: false
+                        });
                         message.channel.send(`Toggled 'setkey' parameter to false`);
-                    } else if (settingsEntry.setKeyInDMS === false) {
-                        settingsEntry.update({
-                            setKeyInDMS: true,
-                        })
+                    } else if (!settingsEntry.setKeyInDMS) {
+                        await settingsEntry.updateOne({
+                            setKeyInDMS: true
+                        });
                         message.channel.send(`Toggled 'setkey' parameter to true`);
                     } else {
                         console.log('Error with setkey parameter.')
