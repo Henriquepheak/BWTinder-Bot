@@ -35,11 +35,13 @@ module.exports = {
                 if (args[1].toLowerCase() === 'autoaccept') {
                     if (settingsEntry.autoDMOn === true) {
                         settingsEntry.update({
-                            autoDMOn: 'false',
+                            autoDMOn: false,
                         })
                         message.channel.send(`Toggled 'autoaccept' parameter to false`);
                     } else if (settingsEntry.autoDMOn === false) {
-
+                        settingsEntry.update({
+                            autoDMOn: true,
+                        })
                         message.channel.send(`Toggled 'autoaccept' parameter to true`);
                     } else {
                         console.log('Error with autoaccept parameter')
@@ -47,12 +49,12 @@ module.exports = {
                 } else if (args[1].toLowerCase() === 'setkey') {
                     if (settingsEntry.setKeyInDMS === true) {
                         settingsEntry.update({
-                            setKeyInDMS: 'false',
+                            setKeyInDMS: false,
                         })
                         message.channel.send(`Toggled 'setkey' parameter to false`);
                     } else if (settingsEntry.setKeyInDMS === false) {
                         settingsEntry.update({
-                            setKeyInDMS: 'true',
+                            setKeyInDMS: true,
                         })
                         message.channel.send(`Toggled 'setkey' parameter to true`);
                     } else {
