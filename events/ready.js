@@ -17,12 +17,25 @@ module.exports = {
         client.mongoose.init()
 
 
-        acceptMatches(client, Discord);
 
-        setInterval(() => {
-            acceptMatches(client, Discord)
-        }, 60000*20);
+        const Guild = client.guilds.cache.map(guild => guild.id);
+        Guild.forEach(async (guild) => {
+            let guildObj = client.guilds.cache.get(guild)
+            let members = guildObj.members.cache.map(member => member.user.id)
+            for (const member of members) {
+                let entry = await settingsData.findOne({userID: member})
+                if (!entry) {
+                    continue
+                }
+                if (entry.autoDMOn === true) {
+                    acceptMatches(client, Discord);
 
+                    setInterval(() => {
+                        acceptMatches(client, Discord)
+                    }, 60000*20)
+                }
+            }
+        })
     }
 }
 
