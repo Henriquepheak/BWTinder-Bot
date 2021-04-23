@@ -3,6 +3,8 @@ const tokenData = require('../schemas/tokenschema');
 const axios = require('axios');
 const Discord = require('discord.js')
 const settingsData = require('../schemas/usersettingschema')
+const Cryptr = require('cryptr')
+const cryptr = new Cryptr(process.env.ENCRYPTION_KEY);
 
 module.exports = {
     name: 'ready',
@@ -54,66 +56,62 @@ async function acceptMatches(client, Discord) {
                 let entry = await tokenData.findOne({ userID: member })
                 let userOBJ = guildObj.members.cache.get(member)
                 if (entry === null) {
-                    continue;
-                } else {
-                    let fetchMessage = await userOBJ.send('Fetching matches...')
-                    axios.post('https://bwtinder.com/api/profile', {
-                        token: entry.apiToken,
-                    }).then((res) => {
-                        if (!res.data.success) return userOBJ.send('`The api request failed, this may be because of an incorrect api token.`')
+                    return
+                }
+                let apiToken = await cryptr.decrypt(entry.apiToken);
+                let fetchMessage = await userOBJ.send('Fetching matches...')
+                axios.post('https://bwtinder.com/api/profile', {
+                    token: apiToken,
+                }).then((res) => {
+                    if (!res.data.success) return userOBJ.send('`The api request failed, this may be because of an incorrect api token.`')
 
-                        let matches = res.data.matches;
-                        if (matches.length === 0) {
-                            const noMatchesEmbed = new Discord.MessageEmbed()
-                            .setColor('F32626')
-                            .setTitle(`No matches to accept: (${userOBJ.user.username})`)
-                            .setDescription('There are no matches that are currently available to you')
-                            .setFooter('As of now, you can check your matches only with api key. Contact BizarreAvatar#8346 if anything bugs out', userOBJ.user.displayAvatarURL())
-                            .setThumbnail(userOBJ.user.displayAvatarURL())
-                            .setTimestamp()
-
-                            fetchMessage.edit('Finished fetching, response below').then(() => {
-                                return fetchMessage.edit(noMatchesEmbed);
-                            }).catch(() => {
-                                return userOBJ.send(noMatchesEmbed);
-                            });
-                        } else {
-                            for (const match of matches) {
-                                axios.post('https://bwtinder.com/api/outcome', {
-                                    match: true,
-                                    token: entry.apiToken,
-                                    user: match.discordID
-                            }).then((result) => {
-                                if (result.data.match === true) {
-                                    acceptedMatches++;
-                                } else if (result.data.match === false) {
-                                    deniedMatches++;
-                                } else {
-                                    console.log(`Error checking matches`)
-                                }
-                            })
-                            }
-                        }
-                        const embedMatches = new Discord.MessageEmbed()
+                    let matches = res.data.matches;
+                    if (matches.length === 0) {
+                        const noMatchesEmbed = new Discord.MessageEmbed()
                         .setColor('F32626')
-                        .setTitle(`${acceptedMatches + deniedMatches} attempted accepts: (${userOBJ.user.username})`)
-                        .setDescription(`Out of these people ${acceptedMatches} swiped right on you. However, ${deniedMatches} swiped left on you`)
+                        .setTitle(`No matches to accept: (${userOBJ.user.username})`)
+                        .setDescription('There are no matches that are currently available to you')
                         .setFooter('As of now, you can check your matches only with api key. Contact BizarreAvatar#8346 if anything bugs out', userOBJ.user.displayAvatarURL())
                         .setThumbnail(userOBJ.user.displayAvatarURL())
-                        .setTimestamp();
+                        .setTimestamp()
 
                         fetchMessage.edit('Finished fetching, response below').then(() => {
-                            return fetchMessage.edit(embedMatches);
+                            return fetchMessage.edit(noMatchesEmbed);
                         }).catch(() => {
-                            return userOBJ.send(embedMatches);
+                            return userOBJ.send(noMatchesEmbed);
                         });
-                    })
-                }
+                    } else {
+                        for (const match of matches) {
+                            axios.post('https://bwtinder.com/api/outcome', {
+                                match: true,
+                                token: apiToken,
+                                user: match.discordID
+                        }).then((result) => {
+                            if (result.data.match === true) {
+                                acceptedMatches++;
+                            } else if (result.data.match === false) {
+                                deniedMatches++;
+                            } else {
+                                console.log(`Error checking matches`)
+                            }
+                        })
+                        }
+                    }
+                    const embedMatches = new Discord.MessageEmbed()
+                    .setColor('F32626')
+                    .setTitle(`${acceptedMatches + deniedMatches} attempted accepts: (${userOBJ.user.username})`)
+                    .setDescription(`Out of these people ${acceptedMatches} swiped right on you. However, ${deniedMatches} swiped left on you`)
+                    .setFooter('As of now, you can check your matches only with api key. Contact BizarreAvatar#8346 if anything bugs out', userOBJ.user.displayAvatarURL())
+                    .setThumbnail(userOBJ.user.displayAvatarURL())
+                    .setTimestamp();
+
+                    fetchMessage.edit('Finished fetching, response below').then(() => {
+                        return fetchMessage.edit(embedMatches);
+                    }).catch(() => {
+                        return userOBJ.send(embedMatches);
+                    });
+                })
             }
         })
 }
 
-function timer(client, Discord) {
-    acceptMatches(client, Discord)
-    timer(client, Discord)
-}
