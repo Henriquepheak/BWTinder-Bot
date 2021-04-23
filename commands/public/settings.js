@@ -1,4 +1,3 @@
-const mongoose = require('mongoose')
 const userSettings = require('../../schemas/usersettingschema')
 
 module.exports = {

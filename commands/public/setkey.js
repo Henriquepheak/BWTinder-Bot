@@ -1,6 +1,4 @@
-const axios = require('axios');
 const tokenData = require('../../schemas/tokenschema')
-const mongoose = require('mongoose')
 const Cryptr = require('cryptr');
 require('dotenv').config();
 
