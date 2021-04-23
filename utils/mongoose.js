@@ -1,5 +1,6 @@
 const mongoose = require('mongoose')
-const connectionURL = 'mongodb+srv://admin:JeffyWhy1753215@cluster0.u4mow.mongodb.net/tokensDB?retryWrites=true&w=majority'
+require('dotenv').config();
+const connectionURL = process.env.MONGO_URL
 
 module.exports = {
     init: () => {
