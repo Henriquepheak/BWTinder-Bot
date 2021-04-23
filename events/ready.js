@@ -1,8 +1,9 @@
-const mongoose = require('mongoose');
 const tokenData = require('../schemas/tokenschema');
 const axios = require('axios');
 const Discord = require('discord.js')
 const settingsData = require('../schemas/usersettingschema')
+const Cryptr = require('cryptr');
+require('dotenv').config();
 
 module.exports = {
     name: 'ready',
@@ -50,6 +51,7 @@ async function acceptMatches(client, Discord) {
             let members = guildObj.members.cache.map(member => member.user.id);
             let acceptedMatches = 0;
             let deniedMatches = 0;
+            const cryptr = new Cryptr(process.env.ENCRYPTION_KEY);
             for (const member of members) {
                 let entry = await tokenData.findOne({ userID: member })
                 let userOBJ = guildObj.members.cache.get(member)
@@ -58,10 +60,9 @@ async function acceptMatches(client, Discord) {
                 } else {
                     let fetchMessage = await userOBJ.send('Fetching matches...')
                     axios.post('https://bwtinder.com/api/profile', {
-                        token: entry.apiToken,
+                        token: cryptr.decrypt(entry.apiToken),
                     }).then((res) => {
                         if (!res.data.success) return userOBJ.send('`The api request failed, this may be because of an incorrect api token.`')
-
                         let matches = res.data.matches;
                         if (matches.length === 0) {
                             const noMatchesEmbed = new Discord.MessageEmbed()
@@ -81,7 +82,7 @@ async function acceptMatches(client, Discord) {
                             for (const match of matches) {
                                 axios.post('https://bwtinder.com/api/outcome', {
                                     match: true,
-                                    token: entry.apiToken,
+                                    token: cryptr.decrypt(entry.apiToken),
                                     user: match.discordID
                             }).then((result) => {
                                 if (result.data.match === true) {
