@@ -1,5 +1,7 @@
 const axios = require('axios');
 const tokenData = require('../../schemas/tokenschema');
+const Cryptr = require('cryptr');
+require('dotenv').config();
 
 module.exports = {
     name: "profile",
@@ -7,11 +9,12 @@ module.exports = {
     async execute(client, message, args, Discord) {
         let apiKey;
         let user = await tokenData.findOne({ userID: message.author.id});
+        const cryptr = new Cryptr(process.env.ENCRYPTION_KEY);
 
         if (args[0]) {
             message.delete();
             apiKey = args[0];
-        } else if (user) apiKey = user.apiToken;
+        } else if (user) apiKey = cryptr.decrypt(user.apiToken);
 
         if (!apiKey) {
             message.channel.send(`Error: No API Key Specified. To get this, go to: https://bit.ly/3t8vTc9`)

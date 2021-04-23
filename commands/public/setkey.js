@@ -1,6 +1,8 @@
 const axios = require('axios');
 const tokenData = require('../../schemas/tokenschema')
 const mongoose = require('mongoose')
+const Cryptr = require('cryptr');
+require('dotenv').config();
 
 module.exports = {
     name: "setkey",
@@ -11,16 +13,17 @@ module.exports = {
             if (!apiKey) {
                 message.channel.send('Error: No API Key. To get this, go to: https://bit.ly/3t8vTc9.')
             } else {
+                const cryptr = new Cryptr(process.env.ENCRYPTION_KEY);
                 const filter = {
                     userID: message.author.id,
                 }
                 const results = await tokenData.findOne(filter);
                 if (results) {
                     await results.updateOne({
-                        apiToken: apiKey
+                        apiToken: cryptr.encrypt(apiKey)
                     });
                 } else {
-                    saveDBData(message.author.id, apiKey)
+                    saveDBData(message.author.id, apiKey, cryptr);
                 }
 
                 const embed = new Discord.MessageEmbed()
@@ -43,10 +46,10 @@ module.exports = {
 }
 
 // Save DB Data Function
-function saveDBData(userID, apiToken) {
+function saveDBData(userID, apiToken, cryptr) {
     const tokenDB = new tokenData({
         userID,
-        apiToken,
+        apiToken: cryptr.encrypt(apiToken)
     });
-    tokenDB.save()
+    tokenDB.save();
 }

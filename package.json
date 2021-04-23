@@ -18,6 +18,7 @@
   "homepage": "https://github.com/andrewtam6/BWTinder-Bot#readme",
   "dependencies": {
     "axios": "^0.21.1",
+    "cryptr": "^6.0.2",
     "discord.js": "^12.5.3",
     "dotenv": "^8.2.0",
     "mongoose": "^5.12.3"
